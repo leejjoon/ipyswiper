@@ -34,7 +34,7 @@ class IpySwiper:
     """
     
     def __init__(self, images: List[Dict[str, str]], transition_speed: int = 0, transition_effect: str = 'slide',
-                 container_height: int = 600, thumbnail_panel_width: int = 200, thumbnails_per_view: int = 4, thumbnail_fit: str = 'contain', show_labels: bool = True, use_base64: bool = False, base_path: str = ""):
+                 container_height: int = 600, container_max_width: Optional[int] = None, thumbnail_panel_width: int = 200, thumbnails_per_view: int = 4, thumbnail_fit: str = 'contain', show_labels: bool = True, use_base64: bool = False, base_path: str = ""):
         """
         Initialize the gallery with image data.
         
@@ -45,6 +45,7 @@ class IpySwiper:
             transition_effect: Swiper transition effect. Options: 'slide', 'fade', 'cube', 'coverflow', 'flip'.
                               Default is 'slide'.
             container_height: Height of the gallery container in pixels. Default is 600.
+            container_max_width: Maximum width of the gallery container in pixels. Default is None (no max-width).
             thumbnail_panel_width: Width of the thumbnail panel in pixels. Default is 200.
             thumbnails_per_view: Number of thumbnails visible at once in the thumbnail strip.
                                 Controls the size of individual thumbnails. Default is 4.
@@ -68,6 +69,7 @@ class IpySwiper:
         self.transition_speed = transition_speed
         self.transition_effect = transition_effect
         self.container_height = container_height
+        self.container_max_width = container_max_width
         self.thumbnail_panel_width = thumbnail_panel_width
         self.thumbnails_per_view = thumbnails_per_view
         self.thumbnail_fit = thumbnail_fit
@@ -109,6 +111,7 @@ class IpySwiper:
             'transition_speed': self.transition_speed,
             'transition_effect': self.transition_effect,
             'container_height': self.container_height,
+            'container_max_width': self.container_max_width,
             'thumbnail_panel_width': self.thumbnail_panel_width,
             'thumbnails_per_view': self.thumbnails_per_view,
             'thumbnail_fit': self.thumbnail_fit,
