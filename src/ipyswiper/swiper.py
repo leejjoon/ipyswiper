@@ -239,7 +239,7 @@ class IpySwiper:
             # Create data URI
             data_uri = f"data:{mime_type};base64,{base64_data}"
             
-            print(f"✅ Converted to base64: {image_path} ({len(base64_data)} chars)")
+            # print(f"✅ Converted to base64: {image_path} ({len(base64_data)} chars)")
             return data_uri
             
         except Exception as e:
@@ -260,7 +260,7 @@ class IpySwiper:
         converted_images = []
         
         for i, img in enumerate(images):
-            print(f"🔄 Processing image {i+1}/{len(images)}: {img['label']}")
+            # print(f"🔄 Processing image {i+1}/{len(images)}: {img['label']}")
             
             image_path = img['image']
             
