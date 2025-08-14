@@ -14,11 +14,9 @@ https://nbviewer.org/github/leejjoon/ipyswiper/blob/main/notebooks/jupyter_galle
 
 ## Install
 
-Once you download/fork repository,
+Once you download/fork repository
 
-    ```bash
     pip install .
-    ```
 
 ## For Administrators
 
