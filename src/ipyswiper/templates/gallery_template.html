@@ -97,6 +97,7 @@ html {
     opacity: 1;
     width: 100%;
     height: 100%;
+    position: relative; /* Add this for label positioning */
     /* CRITICAL FIX: Allow Swiper to control positioning - DO NOT override transforms */
     /* Removed: left: 0 !important; top: 0 !important; transform: none !important; */
 }
@@ -111,6 +112,25 @@ html {
     opacity: 1;
     visibility: visible;
     /* Allow natural centering without transform interference */
+}
+
+/* Main Image Label */
+.main-image-label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    max-width: calc(100% - 20px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
 }
 
 /* Navigation Buttons */
@@ -451,7 +471,11 @@ function initializeGallery(containerSelector, images) {
             // Create main slide
             const mainSlide = document.createElement('div');
             mainSlide.className = 'swiper-slide';
-            mainSlide.innerHTML = `<img src="${item.image}" alt="${item.label}" loading="lazy" class="gallery-main-image">`;
+            const mainLabelHtml = {{ show_labels|lower }} ? `<div class="main-image-label">${item.label}</div>` : '';
+            mainSlide.innerHTML = `
+                <img src="${item.image}" alt="${item.label}" loading="lazy" class="gallery-main-image">
+                ${mainLabelHtml}
+            `;
             console.log(`  - Created main slide with image: ${item.image.substring(0, 50)}...`);
             
             // Add load/error handlers to main image
