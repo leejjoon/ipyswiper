@@ -6,8 +6,19 @@ This component provides an interactive image gallery with:
 - Main image display with optional fade effects
 - Scrollable thumbnail strip
 - Keyboard navigation support
-- Multiple instances support without conflicts
-- Standalone HTML export capability
+- Standalone HTML export
+
+## Notebook example
+
+https://nbviewer.org/github/leejjoon/ipyswiper/blob/main/notebooks/jupyter_gallery_demo.ipynb
+
+## Install
+
+Once you download/fork repository,
+
+    ```bash
+    pip install .
+    ```
 
 ## For Administrators
 
