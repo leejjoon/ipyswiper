@@ -34,7 +34,10 @@ class IpySwiper:
     """
     
     def __init__(self, images: List[Dict[str, str]], transition_speed: int = 0, transition_effect: str = 'slide',
-                 container_height: int = 600, container_max_width: Optional[int] = None, thumbnail_panel_width: int = 200, thumbnails_per_view: int = 4, thumbnail_fit: str = 'contain', show_labels: bool = True, use_base64: bool = False, base_path: str = ""):
+                 container_height: int = 600, container_max_width: Optional[int] = None, thumbnail_panel_width: int = 200,
+                 thumbnails_per_view: int = 4, thumbnail_fit: str = 'contain', show_labels: bool = True,
+                 use_base64: bool = False, base_path: str = "",
+                 label_key: str = 'label', image_key: str = 'image'):
         """
         Initialize the gallery with image data.
         
@@ -54,18 +57,28 @@ class IpySwiper:
             show_labels: Whether to show image labels on thumbnails. Default is False.
             use_base64: Whether to convert images to base64 data URIs for standalone HTML. Default is False.
             base_path: Base path to prepend to relative image paths when converting to base64. Default is "".
+            label_key: The key for the image label in the images dictionary. Default is 'label'.
+            image_key: The key for the image path in the images dictionary. Default is 'image'.
         """
         if not images:
             raise ValueError("Images list cannot be empty")
         
-        # Validate image data structure
+        self.label_key = label_key
+        self.image_key = image_key
+
+        # Validate and standardize image data structure
+        self.images = []
         for i, img in enumerate(images):
             if not isinstance(img, dict):
                 raise ValueError(f"Image {i} must be a dictionary")
-            if 'label' not in img or 'image' not in img:
-                raise ValueError(f"Image {i} must have 'label' and 'image' keys")
-        
-        self.images = images
+            if self.label_key not in img or self.image_key not in img:
+                raise ValueError(f"Image {i} must have '{self.label_key}' and '{self.image_key}' keys")
+
+            self.images.append({
+                'label': img[self.label_key],
+                'image': img[self.image_key]
+            })
+
         self.transition_speed = transition_speed
         self.transition_effect = transition_effect
         self.container_height = container_height
@@ -139,13 +152,16 @@ class IpySwiper:
         from IPython.display import display
         display(HTML(full_html))
     
-    def save_to_html(self, filepath: str, title: str = "Image Gallery") -> None:
+    def save_to_html(self, filepath: Optional[str] = None, title: str = "Image Gallery") -> Optional[str]:
         """
-        Save the gallery as a standalone HTML file.
+        Save the gallery as a standalone HTML file, or return the HTML as a string.
         
         Args:
-            filepath: Path where the HTML file will be saved
-            title: Title for the HTML page
+            filepath: Path to save the HTML file. If None, the HTML is returned as a string.
+            title: Title for the HTML page.
+
+        Returns:
+            HTML content as a string if filepath is None, otherwise None.
         """
         # Render the gallery content
         gallery_content = self._render_gallery()
@@ -159,14 +175,19 @@ class IpySwiper:
             gallery_content=gallery_content
         )
         
-        # Write to file
-        output_path = Path(filepath)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(full_html)
-        
-        print(f"Gallery saved to: {output_path.absolute()}")
+        if filepath:
+            # Write to file
+            output_path = Path(filepath)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+
+            with open(output_path, 'w', encoding='utf-8') as f:
+                f.write(full_html)
+
+            print(f"Gallery saved to: {output_path.absolute()}")
+            return None
+        else:
+            # Return as string
+            return full_html
     
     def add_image(self, label: str, image: str) -> None:
         """
@@ -176,7 +197,10 @@ class IpySwiper:
             label: Label/description for the image
             image: Path or URL to the image
         """
-        self.images.append({'label': label, 'image': image})
+        self.images.append({
+            'label': label,
+            'image': image
+        })
     
     def remove_image(self, index: int) -> None:
         """
@@ -345,7 +369,8 @@ class IpySwiper:
             json_path: Path to JSON file containing image data
             use_base64: Whether to convert images to base64 data URIs
             base_path: Base path to prepend to relative image paths when converting to base64
-            **kwargs: Additional arguments to pass to IpySwiper constructor
+            **kwargs: Additional arguments to pass to IpySwiper constructor,
+                      including `label_key` and `image_key`.
             
         Returns:
             IpySwiper instance or None if loading fails
