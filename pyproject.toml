@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "ipyswiper"
-version = "0.1.1"
+version = "0.1.2"
 description = "A reusable interactive image swiper component for Jupyter Notebooks."
 authors = [
     {name = "J.J. Lee", email = "lee.j.joon@gmail.com"},
